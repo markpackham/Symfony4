@@ -10,6 +10,7 @@ class ArticleController
 {
     /**
      * @Route("/")
+     * @Method({"GET"})
      */
     public function index()
     {
