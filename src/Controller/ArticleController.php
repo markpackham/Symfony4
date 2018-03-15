@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class ArticleController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="article_list")
      * @Method({"GET"})
      */
     public function index()
@@ -21,6 +21,14 @@ class ArticleController extends Controller
         return $this->render('articles/index.html.twig', array('articles' => $articles));
     }
 
+    /**
+     * @Route("/article/{id}", name="article_show")
+     */
+    public function show($id)
+    {
+        $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
+        return $this->render('articles/show.html.twig', array('article' => $article));
+    }
 
 //    /**
 //     * @Route("/article/save")
@@ -41,5 +49,5 @@ class ArticleController extends Controller
         return new Response('Saved an article with the id of ' .
             $article->getId());
         */
-    
+
 }
