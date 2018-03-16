@@ -37,6 +37,7 @@ class ArticleController extends Controller {
           ['class' => 'form-control'],
       ])
       ->add('body', TextareaType::class, [
+        //body not require since we put required => FALSE
         'required' => FALSE,
         'attr' =>
           [
@@ -52,6 +53,20 @@ class ArticleController extends Controller {
             'class' => 'btn btn-primary mt-3',
           ],
       ])->getForm();
+
+    $form->handleRequest($request);
+
+    //check submission
+    if ($form->isSubmitted() && $form->isValid()) {
+      $article = $form->getData();
+
+      $entityManager = $this->getDoctrine()->getManager();
+      $entityManager->persist($article);
+      $entityManager->flush();
+
+      //send us back to the homepage after flushing our persisted data
+      return $this->redirectToRoute('article_list');
+    }
 
     return $this->render('articles/new.html.twig', [
       'form' => $form->createView(),
