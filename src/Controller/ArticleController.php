@@ -73,6 +73,56 @@ class ArticleController extends Controller {
     ]);
   }
 
+
+  /**
+   * @Route("/article/edit/{id}", name="edit_article")
+   * @Method({"GET","POST"})
+   */
+  public function edit(Request $request, $id) {
+    $article = new Article();
+    $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
+
+    $form = $this->createFormBuilder($article)
+      ->add('title', TextType::class, [
+        'attr' =>
+          ['class' => 'form-control'],
+      ])
+      ->add('body', TextareaType::class, [
+        //body not require since we put required => FALSE
+        'required' => FALSE,
+        'attr' =>
+          [
+            'class' => 'form-control',
+          ],
+      ])
+      //Save button
+      ->add('save', SubmitType::class, [
+        'label' => 'Create',
+        'attr' =>
+        //mt-3 means margin top 3
+          [
+            'class' => 'btn btn-primary mt-3',
+          ],
+      ])->getForm();
+
+    $form->handleRequest($request);
+
+    //check submission
+    if ($form->isSubmitted() && $form->isValid()) {
+
+      $entityManager = $this->getDoctrine()->getManager();
+      $entityManager->flush();
+
+      //send us back to the homepage after flushing our persisted data
+      return $this->redirectToRoute('article_list');
+    }
+
+    return $this->render('articles/edit.html.twig', [
+      'form' => $form->createView(),
+    ]);
+  }
+
+
   //show needs to go below new_article or you end up with nulls like the message below
   // "Impossible to access an attribute ("title") on a null variable."
   /**
