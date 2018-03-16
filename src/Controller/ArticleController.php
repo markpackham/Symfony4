@@ -97,7 +97,7 @@ class ArticleController extends Controller {
       ])
       //Save button
       ->add('save', SubmitType::class, [
-        'label' => 'Create',
+        'label' => 'Update',
         'attr' =>
         //mt-3 means margin top 3
           [
