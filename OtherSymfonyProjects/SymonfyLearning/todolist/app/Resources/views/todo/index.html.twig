@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2 class="page-header">Current Todos</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Todo</th>
+            <th scope="col">Due Date</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- loop through the database table so we get all the results -->
+        {% for todo in todos %}
+            <tr>
+                <th scope="row">{{ todo.id }}</th>
+                <td>{{ todo.name }}</td>
+                <!-- Convert data in database into a manner that we can read -->
+                <!-- We must use dueDate and not due_date since the getter is here src\AppBundle\Entity -->
+                <td>{{ todo.dueDate|date('F j, Y, g:i a') }}</td>
+                <td>
+                    <a href="/todo/details/{{ todo.id }}" class="btn btn-success">View</a>
+                    <a href="/todo/edit/{{ todo.id }}" class="btn btn-default">Edit</a>
+                    <a href="/todo/delete/{{ todo.id }}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
